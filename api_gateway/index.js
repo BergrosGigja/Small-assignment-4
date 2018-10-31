@@ -44,7 +44,17 @@ const configureMessageBroker = channel => {
 
     app.use(bodyParser.json());
 
-    // TODO: Setup route
+    // Create new order
+    // http://localhost:3000/api/orders
+    // add json object in body
+    app.post('/api/orders', (req, res) => {
+        const { body } = req;
+        const bodyJSON = JSON.stringify(body);
+
+        channel.publish(order, createOrder, new Buffer(bodyJSON));
+        console.log(`[x] sent: ${bodyJSON}`);
+        return res.json('All is well');
+    });
 
     app.listen(PORT, () => console.log(`Listening on http://localhost:${PORT}`));
 })().catch(e => console.error(e));
